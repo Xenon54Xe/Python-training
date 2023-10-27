@@ -5,7 +5,7 @@ import tkinter as tk
 Variables globales (ce n'est pas nécéssaire de toutes les regrouper au même 
 endroit mais c'est plus propre)
 """
-ref = {
+_ref = {
         0: "0",
         1: "1",
         2: "2",
@@ -44,7 +44,7 @@ ref = {
         34: "Y",
         35: "Z"
     }
-current_mode = "decimal"
+_current_mode = "decimal"
 _decimal_m = "decimal"
 _binary_m = "binary"
 _hexadecimal_m = "hexadecimal"
@@ -56,9 +56,9 @@ Définition des fonction permettant le fonctionnement du script *****I et II****
 
 
 def detect_base(number: str):  # Etape : *****I-2 et I-3.A*****
-    global _decimal_m, _binary_m, _hexadecimal_m, ref
+    global _decimal_m, _binary_m, _hexadecimal_m, _ref
 
-    possible_value = [ref[i] for i in ref.keys()]
+    possible_value = [_ref[i] for i in _ref.keys()]
     decimal = True
     binary = True
     hexadecimal = True
@@ -106,7 +106,7 @@ def bin_to_dec(number: str):  # *****II-2*****
 
 
 def bin_to_hex(number: str):  # *****II-3*****
-    global ref
+    global _ref
 
     num = number
     bin_list = []
@@ -122,7 +122,7 @@ def bin_to_hex(number: str):  # *****II-3*****
     result = ""
     for i in bin_list:
         decimal = bin_to_dec(i)
-        hexadecimal = ref[int(decimal)]
+        hexadecimal = _ref[int(decimal)]
         result += hexadecimal
     return result
 
@@ -148,9 +148,9 @@ def invert_dictionary(dictionary: dict):
 
 
 def hex_to_dec(number):  # *****II-4*****
-    global ref
+    global _ref
 
-    new_ref = invert_dictionary(ref)
+    new_ref = invert_dictionary(_ref)
     power = len(number) - 1
     value = 0
     for i in range(len(number)):
@@ -168,8 +168,8 @@ def convert(n: int, m: int, number: str) -> str:  # *****IV*****
     :param number:
     :return:
     """
-    global ref
-    inverted_ref = invert_dictionary(ref)
+    global _ref
+    inverted_ref = invert_dictionary(_ref)
 
     # on définit la base la plus petite comme étant la base 2 et la plus grande
     # la base 35
@@ -202,7 +202,7 @@ def convert(n: int, m: int, number: str) -> str:  # *****IV*****
     result = ""
     while value > 0:
         rest = value % m
-        result = ref[rest] + result
+        result = _ref[rest] + result
         value //= m
 
     return result
@@ -225,7 +225,7 @@ def main(*args):  # *****III-1*****
     :param args:
     :return:
     """
-    global current_mode
+    global _current_mode
 
     number_to_convert = select_number_vr.get()  # *****III-2.A*****
     if number_to_convert == "":
@@ -235,7 +235,7 @@ def main(*args):  # *****III-1*****
     if number_base is None:
         raise Exception("Le nombre n'est pas conforme")
 
-    selected_base = base(current_mode, number_base)  # *****III-2.C*****
+    selected_base = base(_current_mode, number_base)  # *****III-2.C*****
 
     """
     La structure en if, elif, else suivante représente l'étape *****III-2.D*****
@@ -388,16 +388,16 @@ def toggle_current_mode():
     """
     Fonction permettant de changer le texte de select_mode_label
     """
-    global current_mode
+    global _current_mode
 
-    if current_mode == _decimal_m:
-        current_mode = _binary_m
+    if _current_mode == _decimal_m:
+        _current_mode = _binary_m
         select_mode_vw.set("Mode : Binaire")
-    elif current_mode == _binary_m:
-        current_mode = _hexadecimal_m
+    elif _current_mode == _binary_m:
+        _current_mode = _hexadecimal_m
         select_mode_vw.set("Mode : Hexadécimal")
     else:
-        current_mode = _decimal_m
+        _current_mode = _decimal_m
         select_mode_vw.set("Mode : Décimal")
     main()
 
